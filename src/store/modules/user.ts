@@ -7,12 +7,8 @@ import {
   routerArrays,
   storageLocal
 } from "../utils";
-import {
-  type UserResult,
-  type RefreshTokenResult,
-  getLogin,
-  refreshTokenApi
-} from "@/api/user";
+import type { UserResult, RefreshTokenResult } from "@/api/user";
+import { backendLogin, refreshBackendToken } from "@/api/backendApi";
 import { useMultiTagsStoreHook } from "./multiTags";
 import { type DataInfo, setToken, removeToken, userKey } from "@/utils/auth";
 
@@ -66,7 +62,7 @@ export const useUserStore = defineStore("pure-user", {
     /** 登入 */
     async loginByUsername(data) {
       return new Promise<UserResult>((resolve, reject) => {
-        getLogin(data)
+        backendLogin(data)
           .then(data => {
             if (data?.success) setToken(data.data);
             resolve(data);
@@ -89,7 +85,7 @@ export const useUserStore = defineStore("pure-user", {
     /** 刷新`token` */
     async handRefreshToken(data) {
       return new Promise<RefreshTokenResult>((resolve, reject) => {
-        refreshTokenApi(data)
+        refreshBackendToken(data)
           .then(data => {
             if (data) {
               setToken(data.data);
